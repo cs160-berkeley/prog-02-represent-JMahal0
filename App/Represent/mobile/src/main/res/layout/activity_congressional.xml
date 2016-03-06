@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    tools:context="com.example.jas.represent.CongressionalActivity">
+
+    <ImageButton
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+
+        android:id="@+id/imgBtn1"
+        android:onClick="pol1Clicked"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true"
+        android:scaleType="centerCrop"
+        />
+
+    <ImageButton
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:id="@+id/imgBtn2"
+        android:onClick="pol2Clicked"
+        android:layout_alignTop="@+id/imgBtn1"
+        android:scaleType="centerCrop"
+        android:layout_toEndOf="@+id/imgBtn1" />
+
+    <ImageButton
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:id="@+id/imgBtn3"
+        android:onClick="pol3Clicked"
+        android:layout_alignBottom="@+id/imgBtn2"
+        android:scaleType="centerCrop"
+        android:layout_toEndOf="@+id/imgBtn2" />
+
+    <ImageButton
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:id="@+id/imgBtn4"
+        android:onClick="pol4Clicked"
+        android:layout_alignBottom="@+id/imgBtn3"
+        android:scaleType="centerCrop"
+        android:layout_toEndOf="@+id/imgBtn3" />
+
+    <ImageButton
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:id="@+id/imgBtn5"
+        android:onClick="pol5Clicked"
+        android:layout_alignTop="@+id/imgBtn4"
+        android:scaleType="centerCrop"
+        android:layout_alignParentEnd="true" />
+
+    <ImageView
+        android:layout_width="110dp"
+        android:layout_height="110dp"
+        android:id="@+id/picFace"
+        android:layout_marginTop="25dp"
+        android:layout_below="@+id/imgBtn1"
+        android:layout_alignParentStart="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="Name"
+        android:textSize="25dp"
+        android:id="@+id/lblName"
+        android:layout_alignTop="@+id/picFace"
+        android:layout_toRightOf="@+id/picFace"
+        android:layout_marginLeft="11dp"
+        android:layout_marginTop="10dp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="Position and Party"
+        android:id="@+id/lblPosnParty"
+        android:layout_marginBottom="28dp"
+        android:layout_alignBottom="@+id/picFace"
+        android:layout_alignStart="@+id/lblName" />
+
+    <ImageView
+        android:layout_width="75dp"
+        android:layout_height="75dp"
+        android:id="@+id/imageView"
+        android:layout_marginTop="30dp"
+        android:src="@drawable/twitter"
+        android:layout_below="@+id/picFace"
+        android:layout_alignParentStart="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="This is a very long tweet. No seriously it is. Can&apos;t you tell?"
+        android:textAlignment="center"
+        android:id="@+id/lblTweet"
+        android:layout_marginLeft="10dp"
+        android:layout_alignTop="@+id/imageView"
+        android:layout_alignBottom="@+id/imageView"
+        android:layout_alignEnd="@+id/imgBtn5"
+        android:layout_toEndOf="@+id/imageView" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="Contact:"
+        android:id="@+id/textView"
+        android:layout_below="@+id/imageView"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="29dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="Website:"
+        android:layout_marginTop="5dp"
+        android:id="@+id/textView2"
+        android:layout_below="@+id/textView"
+        android:layout_alignParentStart="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:id="@+id/lblEmail"
+        android:layout_above="@+id/textView2"
+        android:layout_alignStart="@+id/lblTweet"
+        android:text="email@website.gov" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="webiste.gov"
+        android:id="@+id/lblWebsite"
+        android:layout_alignTop="@+id/textView2"
+        android:layout_alignStart="@+id/lblEmail" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="More Info"
+        android:id="@+id/btnMore"
+        android:layout_below="@+id/textView2"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentBottom="true"
+        android:layout_margin="5dp"
+        android:textSize="20dp"
+        android:layout_alignEnd="@+id/lblTweet" />
+
+
+</RelativeLayout>

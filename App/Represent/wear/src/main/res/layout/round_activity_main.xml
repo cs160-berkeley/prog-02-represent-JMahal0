@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.jas.represent.MainActivity"
+    tools:deviceIds="wear_round"
+    android:background="#FFFFFF">
+
+    <TextView
+        android:id="@+id/lblHeader"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="Politicial Name"
+        android:textColor="#000000"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true" />
+
+    <TextView
+        android:id="@+id/lblSubheader"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="Position and Party"
+        android:textColor="#000000"
+        android:layout_below="@+id/lblHeader"
+        android:layout_centerHorizontal="true" />
+
+    <ImageView
+        android:layout_width="75dp"
+        android:layout_height="75dp"
+        android:width="75dp"
+        android:height="75dp"
+        android:id="@+id/picMain"
+        android:src="@drawable/election2012"
+        android:paddingBottom="5dp"
+        android:layout_above="@+id/lblHeader"
+        android:layout_centerHorizontal="true" />
+
+    <ImageView
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:width="25dp"
+        android:height="25dp"
+        android:id="@+id/picArrowDown"
+        android:src="@drawable/arrow_down"
+        android:paddingBottom="5dp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true" />
+
+    <ImageView
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:width="25dp"
+        android:height="25dp"
+        android:id="@+id/picArrowRight"
+        android:src="@drawable/arrow_right"
+        android:paddingBottom="5dp"
+        android:layout_alignBottom="@+id/picMain"
+        android:layout_toEndOf="@+id/lblHeader" />
+
+    <ImageView
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:width="25dp"
+        android:height="25dp"
+        android:id="@+id/picArrowLeft"
+        android:src="@drawable/arrow_left"
+        android:paddingBottom="5dp"
+        android:layout_alignBottom="@+id/picMain"
+        android:layout_alignParentStart="true" />
+
+
+</RelativeLayout>
