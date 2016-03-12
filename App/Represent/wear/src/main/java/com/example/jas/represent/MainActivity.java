@@ -55,22 +55,14 @@ public class MainActivity extends Activity implements SensorEventListener {
         msensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE) ;
         msensor = msensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER) ;
 
-        Intent intent = getIntent();
-        Bundle extras = intent.getExtras();
+        arrowDown.setVisibility(View.INVISIBLE);
 
-//        Log.d("Looky DIS", "this method works");
-        if (extras != null) {
-            Log.d("watch listening", "Watch Listener works");
-//            String zip = extras.getString("ZIP");
-            int polSet = extras.getInt("ZIP");
-            resetAllViews(polSet);
-        }
+        setupBundle(getIntent());
 
-
-        addPoliticianPage("Politician", "Position", '?', R.drawable.usflag);
+        addPoliticianPage("Politician", "Position", "?");
 //        addPoliticianPage("Pol2", "Senator", 'D', R.drawable.usflag);
 //        addPoliticianPage("Barbara Lee", "Representative", 'D', R.drawable.blee);
-        add2012Page("County", "State", 51, 49);
+        add2012Page("USA", "Overall", 51, 47);
 //
         polIndex = 1;
         polMode = true;
@@ -84,37 +76,31 @@ public class MainActivity extends Activity implements SensorEventListener {
     protected void onResume(){
         super.onResume();
 
-        Intent intent = getIntent();
-        Bundle extras = intent.getExtras();
-        if (extras != null) {
-            Log.d("watch listening", "Watch Listener works");
-//            String zip = extras.getString("ZIP");
-            int polSet = extras.getInt("ZIP");
-            resetAllViews(polSet);
-        }
-
+        setupBundle(getIntent());
 
         msensorManager.registerListener(this, msensor, SensorManager.SENSOR_DELAY_NORMAL);
     }
 
+    public void setupBundle(Intent in){
+        Bundle extras = in.getExtras();
 
-    public void resetAllViews(int pSet){
-        Log.d("Wear MAIN", "POL SET = " + pSet);
+        if (extras != null) {
+            Log.d("watch listening", "Watch Listener works");
+//            String zip = extras.getString("ZIP");
+            int pgs = extras.getInt("NUMPAGES");
+            arrowDown.setVisibility(View.VISIBLE);
+            resetAllViews(pgs);
+        }
+    }
+
+
+    public void resetAllViews(int numPages){
+        Log.d("Wear MAIN", "Num pages = " + numPages);
 
         pages.clear();
-
-        if (pSet == 0) {
-            addPoliticianPage("Barbara Boxer", "Senator", 'D', R.drawable.bboxer);
-            addPoliticianPage("Dianne Feinstein", "Senator", 'D', R.drawable.dfeinstein);
-            addPoliticianPage("Barbara Lee", "Representative", 'D', R.drawable.blee);
-            add2012Page("Alameda", "CA", 79, 18);
-        }
-        if (pSet == 1) {
-            addPoliticianPage("Deb Fischer", "Senator", 'R', R.drawable.dfischer);
-            addPoliticianPage("Ben Sasse", "Senator", 'R', R.drawable.bsasse);
-            addPoliticianPage("Jeff Fortenberry", "Representative", 'R', R.drawable.jfortenberry);
-            add2012Page("Lancaster", "NE", 49, 50);
-
+        numPages = WatchListenerService.pgs.size();
+        for (int i = 0; i<numPages; i++) {
+            pages.add(WatchListenerService.pgs.get(i));
         }
 
         polIndex = 1;
@@ -142,12 +128,20 @@ public class MainActivity extends Activity implements SensorEventListener {
 
     }
 
-    void addPoliticianPage(String polName, String polPosition, char polParty, int polImage) {
-        WatchPage pg = new WatchPage(true, polName, polPosition + " - " + polParty, polImage);
+    void addPoliticianPage(String polName, String polPosition, String polParty) {
+        int img = R.drawable.usflag;
+
+        if (polParty.equals("D")){
+            img = R.drawable.dem_logo;
+        } else if (polParty.equals("R")){
+            img = R.drawable.rep_logo;
+        }
+
+        WatchPage pg = new WatchPage(true, polName, polPosition + " - " + polParty, img);
         pages.add(pg);
     }
 
-    void add2012Page(String county, String state, int obamaPercent, int romneyPercent) {
+    void add2012Page(String county, String state, double obamaPercent, double romneyPercent) {
         String obama = "Obama: " + obamaPercent + "%\n";
         String romney = "Romney: " + romneyPercent + "%\n";
         String header;
@@ -196,7 +190,7 @@ public class MainActivity extends Activity implements SensorEventListener {
 
             Intent sendIntent = new Intent(getBaseContext(), WatchToPhoneService.class);
             sendIntent.putExtra("SWITCH", polIndex);
-//            startService(sendIntent);
+            startService(sendIntent);
 
             Log.d("Watch MAIN", "switch left");
         }
@@ -213,7 +207,7 @@ public class MainActivity extends Activity implements SensorEventListener {
 
             Intent sendIntent = new Intent(getBaseContext(), WatchToPhoneService.class);
             sendIntent.putExtra("SWITCH", polIndex);
-//            startService(sendIntent);
+            startService(sendIntent);
 
             Log.d("Watch MAIN", "switch right");
         }
@@ -238,14 +232,16 @@ public class MainActivity extends Activity implements SensorEventListener {
 //        Log.d("Wear main", "Shake Accuracy");
     }
 
-    private float lastPoll = 0;
+    private static float lastPoll = 0;
+    private static int stop = 0;
     @Override
     public void onSensorChanged(SensorEvent event) {
         final float threshold = 50;
         float poll = Math.abs(event.values[0]) + Math.abs(event.values[1]) + Math.abs(event.values[2]);
 
 
-        if (Math.abs(poll - lastPoll) > threshold){
+        if (Math.abs(poll - lastPoll) > threshold && stop <2){
+            stop++;
             Log.d("Wear main", "Shake Sensor");
             shake(null);
         }

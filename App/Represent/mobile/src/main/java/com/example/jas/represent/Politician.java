@@ -1,29 +1,44 @@
 package com.example.jas.represent;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+
 import java.util.ArrayList;
 
 
 public class Politician {
 
-    private String name, position, party, tweet, email, website;
-    private int image;
+    private String id, name, position, party, tweetID, email, website;
+    private Bitmap image;
     private ArrayList<String> committees, bills;
 
 
-    public Politician(String _name, String _position, String _party, String _tweet, String _email, String _website,
-                      int _image, ArrayList<String> _committees, ArrayList<String> _bills) {
+    public Politician(String _id, String _name, String _position, String _party, String _tweetID, String _email, String _website) {
+        id = _id;
         name =_name;
-        position = _position;
+
+        position = "Senator";
+        if(_position.equals("Rep")) {
+            position = "Representative";
+        }
+
         party =_party;
-        tweet = _tweet;
+        tweetID = _tweetID;
         email = _email;
         website = _website;
-        image = _image;
-        committees = _committees;
-        bills = _bills;
+
+        committees = new ArrayList<String>();
+        bills = new ArrayList<String>();
+        image = null;
     }
 
-    public int getImage(){return image;}
+    public void setImage(Bitmap _image){
+        image = _image;
+    }
+
+    public String getId(){return id;}
+
+    public Bitmap getImage(){return image;}
 
     public String getName(){return name;}
 
@@ -31,7 +46,7 @@ public class Politician {
 
     public String getParty(){return party;}
 
-    public String getTweet(){return tweet;}
+    public String getTweetID(){return tweetID;}
 
     public String getEmail() {return email;}
 

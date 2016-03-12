@@ -10,14 +10,14 @@
     tools:context="com.example.jas.represent.DetailedActivity">
 
     <ImageView
-        android:layout_width="110dp"
-        android:layout_height="110dp"
+        android:layout_width="125dp"
+        android:layout_height="125dp"
         android:width="75dp"
         android:height="75dp"
         android:id="@+id/picFace"
 
         android:layout_alignParentTop="true"
-        android:layout_alignParentStart="true" />
+        android:layout_centerHorizontal="true" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -25,11 +25,11 @@
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="Politician Name"
         android:id="@+id/lblName"
+        android:textAlignment="center"
         android:textSize="25dp"
-        android:layout_marginStart="15dp"
-        android:layout_marginTop="25dp"
-        android:layout_alignTop="@+id/picFace"
-        android:layout_toEndOf="@+id/picFace" />
+        android:layout_marginTop="10dp"
+        android:layout_below="@+id/picFace"
+        android:layout_centerHorizontal="true" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -37,9 +37,10 @@
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="Position and Party"
         android:id="@+id/lblPosnParty"
+        android:textAlignment="center"
         android:paddingTop="5dp"
         android:layout_below="@+id/lblName"
-        android:layout_alignStart="@+id/lblName" />
+        android:layout_centerHorizontal="true" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -48,34 +49,36 @@
         android:text="Committees"
         android:id="@+id/lblCommittee"
         android:paddingTop="15dp"
-        android:layout_below="@+id/picFace"
-        android:layout_alignParentStart="true" />
+        android:layout_marginTop="25dp"
+        android:textAlignment="center"
+        android:layout_below="@+id/lblPosnParty"
+        android:layout_alignStart="@+id/picFace" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Recent Bills Supported"
+        android:text="Recent Bills Sponsored"
         android:id="@+id/lblRecentBill"
         android:paddingTop="15dp"
-        android:layout_marginTop="111dp"
-        android:layout_below="@+id/lblCommittee"
-        android:layout_alignParentStart="true" />
+        android:textAlignment="center"
+        android:layout_below="@+id/spinCommittees"
+        android:layout_centerHorizontal="true" />
 
     <Spinner
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
         android:id="@+id/spinCommittees"
+        android:layout_alignParentStart="true"
         android:layout_below="@+id/lblCommittee"
-        android:layout_alignParentStart="true" />
+        android:layout_alignParentLeft="true" />
 
     <Spinner
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/spinRecentBills"
         android:layout_below="@+id/lblRecentBill"
-        android:layout_marginTop="10dp" />
+        android:layout_alignParentLeft="true" />
 
 
 

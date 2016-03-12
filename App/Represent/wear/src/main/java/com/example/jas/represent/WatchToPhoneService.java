@@ -45,13 +45,16 @@ public class WatchToPhoneService extends Service implements GoogleApiClient.Conn
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startID){
+        Log.d("Watch2Phone", "About to send stuff from watch ");
 
         Bundle extras = intent.getExtras();
         final String action = extras.getString("ACTION");
 
         final int switchPol = extras.getInt("SWITCH", -1);
 
-        Log.d("Watch2Phone", "About to send stuff from watch ");
+        Log.d("Watch2Phone", "swich index = "+switchPol );
+
+
         // Send the message with the cat name
         new Thread(new Runnable() {
             @Override

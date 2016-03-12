@@ -1,6 +1,7 @@
 package com.example.jas.represent;
 
 import android.app.Service;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.IBinder;
@@ -44,25 +45,46 @@ public class PhoneToWatchService extends Service {
     public int onStartCommand(Intent intent, int flags, int startId) {
         // Which cat do we want to feed? Grab this info from INTENT
         // which was passed over when we called startService
-        Bundle extras = intent.getExtras();
-        final int zip = extras.getInt("ZIP");
-        final int pSet = extras.getInt("pSet");
+        if (intent != null) {
+            Bundle extras = intent.getExtras();
+            final int numPols = extras.getInt("ZIP");
+
+            String county = extras.getString("COUNTY");
+            String state = extras.getString("STATE");
+            double obamaNum = extras.getDouble("OBAMA");
+            double romneyNum = extras.getDouble("ROMNEY");
+
 
 //        Service _this = this;
 
-        // Send the message with the cat name
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                //first, connect to the apiclient
-                mApiClient.connect();
-                //now that you're connected, send a massage with the cat name
-                Log.d("phone2watch", "Sending int " + zip);
-                sendMessage("/zip", ""+zip);
+            String msg = county + ":" + state + ":" + obamaNum + ":" + romneyNum + ":" + numPols + ":";
+            //need to pass getName, getPosition, getParty
+            for (int i = 0; i < numPols; i++) {
+                Politician pol = CongressionalActivity.politicians.get(i);
+                msg += pol.getName()+ ":" + pol.getPosition() + ":" + pol.getParty()+":";
             }
-        }).start();
+            Log.d("Phone2Watch", "Msg = "+msg);
+
+            final String message = msg;
+
+            // Send the message with the cat name
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    //first, connect to the apiclient
+                    mApiClient.connect();
+                    //now that you're connected, send a massage with the cat name
+                    Log.d("phone2watch", "Sending int " + numPols);
+//                    sendMessage("/zip", message);
+                    sendMessage("/zip", message);
+                }
+            }).start();
 //        _this.stopSelf();
-        return START_STICKY;
+            return START_STICKY;
+        } else {
+            Log.d("Phone2Watch", "this shouldnt be happening");
+            return 0;
+        }
     }
 
     @Override //remember, all services need to implement an IBiner

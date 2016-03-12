@@ -40,10 +40,10 @@ public class PhoneListenerService extends WearableListenerService {
             String value = new String(messageEvent.getData(), StandardCharsets.UTF_8);
             int index = Integer.parseInt(value);
 
-            Intent intent = new Intent(this, CongressionalActivity.class);
+            Intent intent = new Intent(this, DetailedActivity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
-            intent.putExtra("switch", index); //Makeshift random variable.
+            intent.putExtra("index", index);
 
             Log.d("Phone Listener", "switch index = "+ index);
 

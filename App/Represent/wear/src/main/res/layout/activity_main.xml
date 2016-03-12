@@ -33,7 +33,7 @@
         android:width="75dp"
         android:height="75dp"
         android:id="@+id/picMain"
-        android:src="@drawable/election2012"
+        android:src="@drawable/blank"
         android:paddingBottom="5dp"
         android:layout_above="@+id/lblHeader"
         android:layout_centerHorizontal="true" />

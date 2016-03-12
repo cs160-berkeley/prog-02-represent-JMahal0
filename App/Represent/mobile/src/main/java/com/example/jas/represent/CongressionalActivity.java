@@ -1,25 +1,46 @@
 package com.example.jas.represent;
 
+import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+//import com.twitter.sdk.android.Twitter;
+//import com.twitter.sdk.android.core.*;
+//import com.twitter.sdk.android.core.models.Tweet;
+//import com.twitter.sdk.android.tweetui.*;
+//import io.fabric.sdk.android.Fabric;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.ArrayList;
 
 public class CongressionalActivity extends AppCompatActivity {
 
-    private ImageButton polImgBtn1, polImgBtn2, polImgBtn3, polImgBtn4, polImgBtn5;
+    private ImageButton polImgBtn1, polImgBtn2, polImgBtn3, polImgBtn4, polImgBtn5, polImgBtn6, polImgBtn7;
     private ImageView face;
     private TextView name, posNparty, tweet, email, website;
     private Button moreInfo;
 
-    private ArrayList<Politician> politicians = new ArrayList<Politician>();
+    public static ArrayList<Politician> politicians = new ArrayList<Politician>();
     private int index = 0;
 
 
@@ -29,7 +50,7 @@ public class CongressionalActivity extends AppCompatActivity {
         setContentView(R.layout.activity_congressional);
 
         polImgBtn1 = (ImageButton) findViewById(R.id.imgBtn1);
-        polImgBtn1.setOnClickListener(new View.OnClickListener(){
+        polImgBtn1.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 pol1Clicked(v);
             }
@@ -58,6 +79,18 @@ public class CongressionalActivity extends AppCompatActivity {
                 pol5Clicked(v);
             }
         });
+        polImgBtn6 = (ImageButton) findViewById(R.id.imgBtn6);
+        polImgBtn6.setOnClickListener(new View.OnClickListener(){
+            public void onClick(View v) {
+                pol6Clicked(v);
+            }
+        });
+        polImgBtn7 = (ImageButton) findViewById(R.id.imgBtn7);
+        polImgBtn7.setOnClickListener(new View.OnClickListener(){
+            public void onClick(View v) {
+                pol7Clicked(v);
+            }
+        });
 
         face = (ImageView) findViewById(R.id.picFace);
         name = (TextView) findViewById(R.id.lblName);
@@ -66,11 +99,12 @@ public class CongressionalActivity extends AppCompatActivity {
         email = (TextView) findViewById(R.id.lblEmail);
         website = (TextView) findViewById(R.id.lblWebsite);
         moreInfo = (Button) findViewById(R.id.btnMore);
-        moreInfo.setOnClickListener(new View.OnClickListener(){
+        moreInfo.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 toDetailedView(v);
             }
         });
+
 
         ArrayList<String> coms = new ArrayList<String >();
         coms.add("Committee for Veterans Health");
@@ -82,47 +116,80 @@ public class CongressionalActivity extends AppCompatActivity {
         Intent intent = getIntent();
         Bundle extras = intent.getExtras();
         if (extras != null) {
-            int polSet = extras.getInt("pSet");
-            Log.i("politician set", "set  = " + polSet);
-            if (polSet == 0){
-                politicians.add(new Politician("Barbara Boxer", "Senator", "D", "Donald Trump is not a leader.",
-                        "senator@boxer.senate.gov", "boxer.senate.gov", R.drawable.bboxer, coms, rbills));
-                politicians.add(new Politician("Dianne Feinstein", "Senator", "D", "Vote in the Democratic Primary.",
-                        "senator@feinstein.senate.gov", "feinstein.senate.gov", R.drawable.dfeinstein, coms, rbills));
-                politicians.add(new Politician("Barbara Lee", "Representative", "D", "Oakland is great.",
-                        "rep@lee.house.gov", "lee.house.gov", R.drawable.blee, coms, rbills));
-            }
-            if (polSet == 1) {
-                politicians.add(new Politician("Deb Fischer", "Senator", "R", "Donald Trump is not a leader.",
-                        "senator@Fischer.senate.gov", "Fischer.senate.gov", R.drawable.dfischer, coms, rbills));
-                politicians.add(new Politician("Ben Sasse", "Senator", "R", "Vote in the Republican Primary.",
-                        "senator@Sasse.senate.gov", "Sasse.senate.gov", R.drawable.bsasse, coms, rbills));
-                politicians.add(new Politician("Jeff Fortenbury", "Representative", "R", "Nebraska is great.",
-                        "rep@jeff.house.gov", "jeff.house.gov", R.drawable.jfortenberry, coms, rbills));
-            }
+//            int i = extras.getInt("index",-1);
+//            if (i != -1) {
+//
+//
+//                Log.d("Congressional Init", "index = " + i);
+//
+//                index = i;
+//                getDetailedInfo(null);
+//            }
+
+//            int polSet = extras.getInt("pSet");
+//            Log.i("politician set", "set  = " + polSet);
+//            if (polSet == 0){
+//                politicians.add(new Politician("Barbara Boxer", "Senator", "D", "Donald Trump is not a leader.",
+//                        "senator@boxer.senate.gov", "boxer.senate.gov", R.drawable.bboxer, coms, rbills));
+//                politicians.add(new Politician("Dianne Feinstein", "Senator", "D", "Vote in the Democratic Primary.",
+//                        "senator@feinstein.senate.gov", "feinstein.senate.gov", R.drawable.dfeinstein, coms, rbills));
+//                politicians.add(new Politician("Barbara Lee", "Representative", "D", "Oakland is great.",
+//                        "rep@lee.house.gov", "lee.house.gov", R.drawable.blee, coms, rbills));
+//            }
+//            if (polSet == 1) {
+//                politicians.add(new Politician("Deb Fischer", "Senator", "R", "Donald Trump is not a leader.",
+//                        "senator@Fischer.senate.gov", "Fischer.senate.gov", R.drawable.dfischer, coms, rbills));
+//                politicians.add(new Politician("Ben Sasse", "Senator", "R", "Vote in the Republican Primary.",
+//                        "senator@Sasse.senate.gov", "Sasse.senate.gov", R.drawable.bsasse, coms, rbills));
+//                politicians.add(new Politician("Jeff Fortenbury", "Representative", "R", "Nebraska is great.",
+//                        "rep@jeff.house.gov", "jeff.house.gov", R.drawable.jfortenberry, coms, rbills));
+//            }
 
         }
 
+//        // TODO: Use a more specific parent
+//        final ViewGroup parentView = (ViewGroup) getWindow().getDecorView().getRootView();
+//        // TODO: Base this Tweet ID on some data from elsewhere in your app
+//        long tweetId = 631879971628183552L;
+//        TweetUtils.loadTweet(tweetId, new Callback<Tweet>() {
+//            @Override
+//            public void success(Result<Tweet> result) {
+//                TweetView tweetView = new TweetView(CongressionalActivity.this, result.data);
+//                parentView.addView(tweetView);
+//            }
+//            @Override
+//            public void failure(TwitterException exception) {
+//                Log.d("TwitterKit", "Load Tweet failure", exception);
+//            }
+//        });
+
+
 
         configurePolBtns();
-
+        Log.d("CongressionalView", "Number of pols " + politicians.size());
         changeView(politicians.get(0));
     }
 
-    //Should move this to Congress View
-    void addPolitician(String _name, String _position, String _party, String _tweet, String _email,
-                       String _website, int _image, ArrayList<String> _committees, ArrayList<String> _bills) {
-        Politician pol = new Politician( _name,  _position,  _party,  _tweet,
-                _email,  _website, _image,  _committees,  _bills);
+    void addPolitician(String _id, String _name, String _position, String _party, String _tweetID, String _email,
+                       String _website) {
+        Politician pol = new Politician(_id, _name,  _position,  _party,  _tweetID,
+                _email,  _website);
         politicians.add(pol);
     }
 
     void changeView(Politician pol) {
-        face.setImageResource(pol.getImage());
+        Bitmap img = pol.getImage();
+        if (img != null) {
+            face.setImageBitmap(pol.getImage());
+        } else {
+            face.setImageResource(R.drawable.blank);
+        }
         name.setText(pol.getName());
         String subheader = pol.getPosition() + " - " + pol.getParty();
         posNparty.setText(subheader);
-        tweet.setText(pol.getTweet());
+
+        tweet.setText(pol.getTweetID()); // This is currently the Twitter handle, not the tweet
+
         email.setText(pol.getEmail());
         website.setText(pol.getWebsite());
 
@@ -130,11 +197,17 @@ public class CongressionalActivity extends AppCompatActivity {
 
     void configurePolBtns(){
 
-        ImageButton polBtns[] ={polImgBtn1, polImgBtn2, polImgBtn3, polImgBtn4, polImgBtn5};
-        for (int i = 0; i < 5; i++){
+        ImageButton polBtns[] ={polImgBtn1, polImgBtn2, polImgBtn3, polImgBtn4, polImgBtn5, polImgBtn6, polImgBtn7};
+        for (int i = 0; i < 7; i++){
             if (i < politicians.size()) {
                 polBtns[i].setVisibility(View.VISIBLE);
-                polBtns[i].setImageResource(politicians.get(i).getImage());
+
+                Bitmap img = politicians.get(i).getImage();
+                if (img != null) {
+                    polBtns[i].setImageBitmap(img);
+                } else {
+                    polBtns[i].setImageResource(R.drawable.blank);
+                }
             } else {
                 polBtns[i].setVisibility(View.INVISIBLE);
             }
@@ -172,33 +245,47 @@ public class CongressionalActivity extends AppCompatActivity {
         changeView(politicians.get(4));
     }
 
-    // Called when moreInfo
-    void toDetailedView(View view) {
+    // Called when polImgBtn6 is clicked
+    void pol6Clicked(View view) {
+        index = 5;
+        changeView(politicians.get(5));
+    }
+
+    // Called when polImgBtn7 is clicked
+    void pol7Clicked(View view) {
+        index = 6;
+        changeView(politicians.get(6));
+    }
+
+    // Called when moreInfo is Clicked
+    void toDetailedView(View v) {
 
         //next screen
-        Intent next = new Intent(view.getContext(), DetailedActivity.class); //temporary
-//        next.putExtra("ZIP", zipCode);
-        next = bundlePolitician(next, politicians.get(index));
-        Log.i("This should not error", next.getExtras().getString("name"));
+        Intent next = new Intent(getBaseContext(), DetailedActivity.class);
+        next.putExtra("index", index);
+//        next = bundlePolitician(next, politicians.get(index));
 
         startActivity(next);
     }
 
 
-    // Puts a politician in an intent to be sent to a different Activity
-    Intent bundlePolitician(Intent intent, Politician pol) {
-        intent.putExtra("name", pol.getName());
-        intent.putExtra("position", pol.getPosition());
-        intent.putExtra("party", pol.getParty());
-        intent.putExtra("tweet", pol.getTweet());
-        intent.putExtra("email", pol.getEmail());
-        intent.putExtra("website", pol.getWebsite());
-        intent.putExtra("image", pol.getImage());
 
-        intent.putStringArrayListExtra("committees", pol.getCommittees());
-        intent.putStringArrayListExtra("bills", pol.getBills());
 
-        return intent;
-    }
+// Shouldn't need this anymore
+//    // Puts a politician in an intent to be sent to a different Activity
+//    Intent bundlePolitician(Intent intent, Politician pol) {
+//        intent.putExtra("name", pol.getName());
+//        intent.putExtra("position", pol.getPosition());
+//        intent.putExtra("party", pol.getParty());
+//        intent.putExtra("tweet", pol.getTweet());
+//        intent.putExtra("email", pol.getEmail());
+//        intent.putExtra("website", pol.getWebsite());
+//        intent.putExtra("image", pol.getImage());
+//
+//        intent.putStringArrayListExtra("committees", pol.getCommittees());
+//        intent.putStringArrayListExtra("bills", pol.getBills());
+//
+//        return intent;
+//    }
 
 }
